@@ -24,6 +24,18 @@ INSERT INTO clientes (nombre, fecha_nacimiento) VALUES
 ('Luis Martínez', '1990-06-15'),
 ('María López', '1985-09-20'),
 ('Pedro Gómez', '2000-03-10');
+
+
+CREATE TABLE contactos (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    nombre VARCHAR(50),
+    telefono VARCHAR(10)
+);
+
+INSERT INTO contactos (nombre, telefono) VALUES
+('Luis Martínez', '3052020202'),
+('María López', '3024646464'),
+('Pedro Gómez', '3014248478');
 ```
 
 
@@ -95,3 +107,55 @@ FROM clientes;
 ```
 
 ![](https://media.discordapp.net/attachments/1337463162940817490/1391830067289657507/image.png?ex=686d5242&is=686c00c2&hm=7032f8e0ffdc45ddbac8de8787762fe716457a5b3878be8b511c9f22c20ca413&=&format=webp&quality=lossless)
+
+## **Caso 3: Formatear Números de Teléfono**
+
+### **Escenario**:
+
+En **CallCenter Solutions**, los números de teléfono están almacenados sin formato y se necesita presentarlos en el formato `(XXX) XXX-XXXX`.
+
+**Tarea**:
+
+1. Crea una función llamada `formatear_telefono` que reciba un número de teléfono en formato `XXXXXXXXXX` y lo devuelva en formato `(XXX) XXX-XXXX`.
+2. Usa la función en un `SELECT` sobre la tabla `contactos`.
+
+```sql
+DELIMITER //
+CREATE FUNCTION formatear_telefono(telefono VARCHAR(10)) RETURNS VARCHAR(14)
+DETERMINISTIC
+BEGIN
+	DECLARE primero VARCHAR(3);
+	DECLARE segundo VARCHAR(3);
+	DECLARE tercero VARCHAR(4);
+	SET primero = SUBSTRING(telefono, 1, 3);
+	SET segundo = SUBSTRING(telefono, 4, 3);
+	SET tercero = SUBSTRING(telefono, 7, 4);
+	RETURN CONCAT('(', primero, ')', ' ', segundo, '-', tercero);
+END //
+
+DELIMITER ;
+
+SELECT nombre, formatear_telefono(telefono) AS telefono FROM contactos;
+```
+
+![](https://media.discordapp.net/attachments/1337463162940817490/1391836173458210867/image.png?ex=686d57f2&is=686c0672&hm=4472b66d0c28953331fc7f5621d324c4bf3ecb26c3559ec151a9c5908d94eb8d&=&format=webp&quality=lossless)
+
+## **Caso 4: Clasificación de Productos por Precio**
+
+### **Escenario**:
+
+En la tienda **E-Shop**, los productos se categorizan en tres niveles según su precio:
+
+- **Bajo**: Menos de 50 USD.
+- **Medio**: Entre 50 y 200 USD.
+- **Alto**: Más de 200 USD.
+
+**Tarea**:
+
+1. Crea una función llamada `clasificar_precio` que reciba un `DECIMAL(10,2)` y devuelva un `VARCHAR(10)` con la clasificación del producto (`Bajo`, `Medio`, `Alto`).
+2. Usa la función en un `SELECT` sobre la tabla `productos`.
+
+```sql
+
+```
+
