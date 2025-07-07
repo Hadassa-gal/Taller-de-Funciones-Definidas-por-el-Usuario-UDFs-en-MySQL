@@ -36,6 +36,18 @@ INSERT INTO contactos (nombre, telefono) VALUES
 ('Luis Martínez', '3052020202'),
 ('María López', '3024646464'),
 ('Pedro Gómez', '3014248478');
+
+
+CREATE TABLE productos (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    nombre VARCHAR(50),
+    precio DECIMAL(10,2)
+);
+
+INSERT INTO productos (nombre, precio) VALUES
+('audifonos', 30),
+('computador', 500),
+('celular', 150);
 ```
 
 
@@ -156,6 +168,26 @@ En la tienda **E-Shop**, los productos se categorizan en tres niveles según su 
 2. Usa la función en un `SELECT` sobre la tabla `productos`.
 
 ```sql
+DELIMITER //
+CREATE FUNCTION clasificar_precio(precio DECIMAL(10,2)) RETURNS VARCHAR(10)
+DETERMINISTIC
+READS SQL DATA
+BEGIN
+	DECLARE clasificacion VARCHAR(10);
+	IF precio  < 50 THEN
+		SET clasificacion = 'Bajo';
+	ELSEIF precio >= 50 AND precio <= 200 THEN
+		SET clasificacion = 'Medio';
+	ELSE
+		SET clasificacion = 'Alto';
+	END IF;
+	RETURN clasificacion;
+END //
 
+DELIMITER ;
+
+SELECT nombre, clasificar_precio(precio) AS clasificacion
+FROM productos;
 ```
 
+![](https://media.discordapp.net/attachments/1337463162940817490/1391840694686978118/image.png?ex=686d5c28&is=686c0aa8&hm=39d6241104a97d21202292fd77dd3191f28dd50734cd9190d7b19383147aee6f&=&format=webp&quality=lossless)
